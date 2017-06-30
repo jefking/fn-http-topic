@@ -14,14 +14,20 @@ module.exports = function (context, req) {
     if (!err) {
         let serviceBusService = azure.createServiceBusService(process.env.ServiceBus);
         serviceBusService.sendTopicMessage(process.env.TopicName, brokeredMessage, function (error) {
-            err = error;
+
+            context.res = {
+                status: error ? 500 : 200,
+                body: error
+            };
+
+            context.done(error);
         });
+    } else {
+        context.res = {
+            status: err ? 500 : 200,
+            body: err
+        };
+
+        context.done(err);
     }
-
-    context.res = {
-        status: err ? 500 : 200,
-        body: err
-    };
-
-    context.done(err);
 };
