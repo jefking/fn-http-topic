@@ -1,7 +1,6 @@
 const azure = require('azure-sb');
 
 module.exports = function (context, req) {
-
     let model = (typeof req.body != 'undefined' && typeof req.body == 'object') ? req.body : null;
     let error = !model ? "no data; or invalid payload in body" : null;
 
@@ -17,7 +16,7 @@ module.exports = function (context, req) {
         }
     }
 
-    let serviceBusService = azure.createServiceBusService(process.env.AzureWebJobsServiceBus);
+    let serviceBusService = azure.createServiceBusService(process.env.ServiceBus);
     serviceBusService.sendTopicMessage(process.env.TopicName, brokeredMessage, function (error) {
         context.done(error);
     });
