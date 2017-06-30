@@ -19,7 +19,7 @@
             "type": "string",
             "defaultValue": "posted",
             "metadata": {
-                "description": "Name of topic."
+                "description": "Name of topic to populate."
             }
         }
     },
@@ -111,14 +111,23 @@
         },
         {
             "apiVersion": "[variables('sbVersion')]",
-            "name": "[parameters('topicName')]",
-            "type": "Topics",
-            "dependsOn": [
-                "[concat('Microsoft.ServiceBus/namespaces/', parameters('serviceBusNamespaceName'))]"
-            ],
-            "properties": {
-                "path": "[parameters('topicName')]"
-            }
+            "name": "[variables('serviceBusNamespaceName')]",
+            "type": "Microsoft.ServiceBus/namespaces",
+            "location": "[resourceGroup().location]",
+            "properties": {},
+            "resources": [
+                {
+                    "apiVersion": "[variables('sbVersion')]",
+                    "name": "[parameters('topicName')]",
+                    "type": "Topics",
+                    "dependsOn": [
+                        "[concat('Microsoft.ServiceBus/namespaces/', variables('serviceBusNamespaceName'))]"
+                    ],
+                    "properties": {
+                        "path": "[parameters('topicName')]"
+                    }
+                }
+            ]
         }
     ]
 }
