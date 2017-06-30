@@ -19,7 +19,7 @@ module.exports = function (context, req) {
     }
 
     context.res = {
-        status: error ? 500 : 200,
+        status: err ? 500 : 200,
         body: err
     };
 
