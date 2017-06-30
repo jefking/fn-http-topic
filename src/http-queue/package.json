@@ -1,0 +1,7 @@
+{
+    "name": "http-topic",
+    "version": "0.0.1",
+    "dependencies": {
+        "azure-sb": "^0.10.4"
+    }
+}
