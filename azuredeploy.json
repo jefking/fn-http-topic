@@ -134,11 +134,10 @@
                             "dependsOn": [
                                 "[parameters('topicName')]"
                             ],
-                            "properties": {},
                             "resources": [
                                 {
                                     "apiVersion": "[variables('sbVersion')]",
-                                    "name": "All",
+                                    "name": "all-rule",
                                     "type": "Rules",
                                     "dependsOn": [
                                         "All"
