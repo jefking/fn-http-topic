@@ -125,7 +125,33 @@
                     ],
                     "properties": {
                         "path": "[parameters('topicName')]"
-                    }
+                    },
+                    "resources": [
+                        {
+                            "apiVersion": "[variables('sbVersion')]",
+                            "name": "All",
+                            "type": "Subscriptions",
+                            "dependsOn": [
+                                "[parameters('topicName')]"
+                            ],
+                            "properties": {},
+                            "resources": [
+                                {
+                                    "apiVersion": "[variables('sbVersion')]",
+                                    "name": "All",
+                                    "type": "Rules",
+                                    "dependsOn": [
+                                        "All"
+                                    ],
+                                    "properties": {
+                                        "filter": {
+                                            "sqlExpression": "1=1"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         }
