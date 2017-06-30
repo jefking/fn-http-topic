@@ -2,12 +2,7 @@ const azure = require('azure-sb');
 
 module.exports = function (context, req) {
     let model = (typeof req.body != 'undefined' && typeof req.body == 'object') ? req.body : null;
-    let error = !model ? "no data; or invalid payload in body" : null;
-
-    context.res = {
-        status: error ? 500 : 200,
-        body: error
-    };
+    let err = !model ? "no data; or invalid payload in body" : null;
 
     var brokeredMessage = {
         body: JSON.stringify(model),
@@ -16,10 +11,17 @@ module.exports = function (context, req) {
         }
     }
 
-    let serviceBusService = azure.createServiceBusService(process.env.ServiceBus);
-    serviceBusService.sendTopicMessage(process.env.TopicName, brokeredMessage, function (error) {
-        context.done(error);
-    });
+    if (!err) {
+        let serviceBusService = azure.createServiceBusService(process.env.ServiceBus);
+        serviceBusService.sendTopicMessage(process.env.TopicName, brokeredMessage, function (error) {
+            err = error;
+        });
+    }
 
-    context.done(error);
+    context.res = {
+        status: error ? 500 : 200,
+        body: err
+    };
+
+    context.done(err);
 };
