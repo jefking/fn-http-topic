@@ -14,6 +14,13 @@
             "metadata": {
                 "description": "The location to use for creating the function app and hosting plan. It must be one of the Azure locations that support function apps."
             }
+        },
+        "topicName": {
+            "type": "string",
+            "defaultValue": "posted",
+            "metadata": {
+                "description": "Name of topic."
+            }
         }
     },
     "variables": {
@@ -62,6 +69,10 @@
                         {
                             "name": "ServiceBus",
                             "value": "[listkeys(variables('authRuleResourceId'), variables('sbVersion')).primaryConnectionString]"
+                        },
+                        {
+                            "name": "TopicName",
+                            "value": "[parameters('topicName')]"
                         }
                     ]
                 },
@@ -100,13 +111,13 @@
         },
         {
             "apiVersion": "[variables('sbVersion')]",
-            "name": "posted",
+            "name": "[parameters('topicName')]",
             "type": "Topics",
             "dependsOn": [
                 "[concat('Microsoft.ServiceBus/namespaces/', parameters('serviceBusNamespaceName'))]"
             ],
             "properties": {
-                "path": "posted"
+                "path": "[parameters('topicName')]"
             }
         }
     ]
